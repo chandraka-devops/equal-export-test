@@ -37,6 +37,7 @@ jobs:
 
       - name: Tag and Push
         run: |
+          docker login -u chandrakadevops
           docker tag equal-expert:v1.0.0 chandrakadevops/equal-export:v1.0.0
           docker push chandrakadevops/equal-export:v1.0.0
           
