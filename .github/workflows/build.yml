@@ -18,4 +18,29 @@ jobs:
           pip install -r requirements.txt
           python3 app.py &
           python3 test_app.py 
+          coverage run --source=app -m unittest discover
+          coverage report -m
+
+      - name: Build the docker image
+        run: |
+          docker build -t equal-expert:v1.0.0 .
+          docker images | grep equal-expert
+
+      - name: Scan vulnrability of image
+        run: |
+          sudo apt-get install wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy
+          trivy image equal-expert:v1.0.0
+
+      - name: Tag and Push
+        run: |
+          docker tag equal-expert:v1.0.0 chandrakadevops/equal-export:v1.0.0
+          docker push chandrakadevops/equal-export:v1.0.0
+          
+      
+
+
 
