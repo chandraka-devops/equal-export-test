@@ -1,0 +1,22 @@
+name: buildtestdeploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  buildtestdeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run test case
+        run: |
+          pwd
+          ls -lrt
+          cd chandra_project
+          pip install -r requirements.txt
+          python3 app.py &
+          python3 test_app.py 
+
